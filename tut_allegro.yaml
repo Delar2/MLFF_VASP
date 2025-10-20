@@ -9,6 +9,9 @@ data:
   _target_: nequip.data.datamodule.ASEDataModule
   split_dataset:
     file_path: train.xyz
+    train: 0.8
+    val: 0.1
+    test: 0.1
   seed: 21
   train_val_split: 0.8
   transforms:
@@ -172,6 +175,7 @@ training_module:
 
 #global_options:
  # allow_tf32: false
+
 
 
 
