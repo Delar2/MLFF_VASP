@@ -6,8 +6,8 @@ chemical_symbols: [Zr, O]
 model_type_names: ${chemical_symbols}
 
 data:
-  _target_: nequip.data.datamodule.atomic_datamodule.AtomicDataModule
-  dataset: ase
+  _target_: nequip.data.datamodule.ASEDataModule
+  seed: 21
   data_source: train.xyz
   train_val_split: 0.8
   transforms:
@@ -15,7 +15,6 @@ data:
       r_max: ${cutoff_radius}
     - _target_: nequip.data.transforms.ChemicalSpeciesToAtomTypeMapper
       chemical_symbols: ${chemical_symbols}
-  seed: 21
   train_dataloader:
     _target_: torch.utils.data.DataLoader
     batch_size: 5
@@ -180,5 +179,6 @@ training_module:
 
 global_options:
   allow_tf32: false
+
 
 
