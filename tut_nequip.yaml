@@ -7,7 +7,7 @@
 # ===========
 # the run types will be completed in sequence
 # one can do `train`, `val`, `test` run types
-run: [train, test]
+run: [train, val, test]
 
 
 # the following parameters (cutoff_radius, chemical_symbols, model_type_names, monitored_metric) are not used directly by the config parser
@@ -33,7 +33,7 @@ num_features: 32    # the multiplicity of the features, 32 is a good default for
 # Because of this distinction, these variables show up as arguments across different categories, including, data, model, metrics and even callbacks.
 # In this case, we fix both to be the same, so we define a single set of each here and use variable interpolation to retrieve them below.
 # This ensures a single location where the values are set to reduce the chances of misconfiguring runs.
-chemical_symbols: [C, H, O, Cu]
+chemical_symbols: [Zr, O]
 model_type_names: ${chemical_symbols}
 
 # We want a metric to condition training on (e.g. for best `ModelCheckpoint`, `EarlyStopping`, LR scheduling) which will show up in various places later on, so we set up a "single source of truth" to interpolate over
@@ -47,7 +47,7 @@ monitored_metric: val0_epoch/weighted_sum
 # New users are advised to read the "Data Configuration" docs before continuing: https://nequip.readthedocs.io/en/latest/guide/configuration/data.html
 data:
   _target_: nequip.data.datamodule.ASEDataModule
-  seed: 456             # dataset seed for reproducibility
+  seed: 21             # dataset seed for reproducibility
 
   # here we take an ASE-readable file (in extxyz format) and split it into train:val:test = 80:10:10
   split_dataset:
@@ -202,7 +202,7 @@ training_module:
     # ^ if you're using PyTorch <= 2.6.0, an error will be thrown -- comment out the line to avoid it
 
     # == basic model params ==
-    seed: 456
+    seed: 21
     model_dtype: float32
     type_names: ${model_type_names}
     r_max: ${cutoff_radius}
@@ -254,3 +254,4 @@ training_module:
       _target_: nequip.nn.pair_potential.ZBL
       units: metal     # Ang and kcal/mol; LAMMPS unit names;  allowed values "metal" and "real"
       chemical_species: ${chemical_symbols}   # must tell ZBL the chemical species of the various model atom types
+
