@@ -1,5 +1,5 @@
 # yamllint disable rule:line-length
-run: [train, test]
+run: [train]
 
 cutoff_radius: 5.0
 chemical_symbols: [Zr, O]
@@ -9,9 +9,6 @@ data:
   _target_: nequip.data.datamodule.ASEDataModule
   split_dataset:
     file_path: train.xyz
-    train: 0.8
-    val: 0.1
-    test: 0.1
   seed: 21
   train_val_split: 0.8
   transforms:
@@ -49,14 +46,6 @@ trainer:
     - _target_: nequip.train.callbacks.TF32Scheduler
       schedule:
         0: true
-
-    - _target_: lightning.pytorch.callbacks.ModelCheckpoint
-      dirpath: ${hydra:runtime.output_dir}
-      save_last: true
-
-    - _target_: lightning.pytorch.callbacks.LearningRateMonitor
-      logging_interval: epoch
-
 # NOTE:
 # interpolation parameters for Allegro model
 num_scalar_features: 64
@@ -183,6 +172,7 @@ training_module:
 
 global_options:
   allow_tf32: false
+
 
 
 
