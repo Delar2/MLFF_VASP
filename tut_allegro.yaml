@@ -6,23 +6,37 @@ chemical_symbols: [Zr, O]
 model_type_names: ${chemical_symbols}
 
 data:
-  _target_: nequip.data.datamodule.ASEDataModule
-  train_file_path: train.xyz
+  _target_: nequip.data.datamodule.ase_datamodule.ASEDataModule
   seed: 21
-  train_val_split: 0.8
+
+  # Use one .xyz and split into train/val/test
+  split_dataset:
+    file_path: /content/MLFF_VASP/train.xyz   # ajusta si tu ruta es distinta
+    train: 0.8
+    val: 0.1
+    test: 0.1
+
+  # Map field names from EXTXYZ to NequIP internal keys
+  key_mapping:
+    energy: energy
+    forces: forces
+  
   transforms:
     - _target_: nequip.data.transforms.NeighborListTransform
       r_max: ${cutoff_radius}
     - _target_: nequip.data.transforms.ChemicalSpeciesToAtomTypeMapper
       chemical_symbols: ${chemical_symbols}
+      
   train_dataloader:
     _target_: torch.utils.data.DataLoader
     batch_size: 5
     num_workers: 5
+    
   val_dataloader:
     _target_: torch.utils.data.DataLoader
     batch_size: 5
     num_workers: ${data.train_dataloader.num_workers}
+    
   test_dataloader: ${data.val_dataloader}
   stats_manager:
     _target_: nequip.data.CommonDataStatisticsManager
@@ -171,6 +185,7 @@ training_module:
 
 #global_options:
  # allow_tf32: false
+
 
 
 
