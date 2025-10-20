@@ -1,5 +1,5 @@
 # yamllint disable rule:line-length
-run: [train]
+run: [train, test, val]
 
 cutoff_radius: 5.0
 chemical_symbols: [Zr, O]
@@ -175,6 +175,7 @@ training_module:
 
 #global_options:
  # allow_tf32: false
+
 
 
 
