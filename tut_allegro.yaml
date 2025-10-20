@@ -170,8 +170,8 @@ training_module:
       chemical_species: ${chemical_symbols}   # must tell ZBL the chemical species of the various model atom types
 
 
-global_options:
-  allow_tf32: false
+#global_options:
+ # allow_tf32: false
 
 
 
