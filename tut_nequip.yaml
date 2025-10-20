@@ -7,7 +7,7 @@
 # ===========
 # the run types will be completed in sequence
 # one can do `train`, `val`, `test` run types
-run: [train, val, test]
+run: [train, test]
 
 
 # the following parameters (cutoff_radius, chemical_symbols, model_type_names, monitored_metric) are not used directly by the config parser
@@ -51,7 +51,7 @@ data:
 
   # here we take an ASE-readable file (in extxyz format) and split it into train:val:test = 80:10:10
   split_dataset:
-    file_path: fcu.xyz
+    file_path: train.xyz
     train: 0.8
     val: 0.1
     test: 0.1
@@ -254,4 +254,5 @@ training_module:
       _target_: nequip.nn.pair_potential.ZBL
       units: metal     # Ang and kcal/mol; LAMMPS unit names;  allowed values "metal" and "real"
       chemical_species: ${chemical_symbols}   # must tell ZBL the chemical species of the various model atom types
+
 
