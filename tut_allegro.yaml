@@ -7,7 +7,7 @@ model_type_names: ${chemical_symbols}
 
 data:
   _target_: nequip.data.datamodule.ASEDataModule
-  file_path: train.xyz
+  train_file_path: train.xyz
   seed: 21
   train_val_split: 0.8
   transforms:
@@ -171,6 +171,7 @@ training_module:
 
 #global_options:
  # allow_tf32: false
+
 
 
 
