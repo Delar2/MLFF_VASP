@@ -6,7 +6,7 @@ chemical_symbols: [Zr, O]
 model_type_names: ${chemical_symbols}
 
 data:
-  _target_: nequip.data.datamodule.ase_datamodule.ASEDataModule
+  _target_: nequip.data.datamodule.ASEDataModule
   seed: 21
 
   # Use one .xyz and split into train/val/test
@@ -185,6 +185,7 @@ training_module:
 
 #global_options:
  # allow_tf32: false
+
 
 
 
