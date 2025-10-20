@@ -2,27 +2,30 @@
 run: [train, test]
 
 cutoff_radius: 5.0
-chemical_symbols: [C, O, H]
+chemical_symbols: [Zr, O]
 model_type_names: ${chemical_symbols}
 
 data:
   _target_: nequip.data.datamodule.sGDML_CCSD_DataModule
-  dataset: aspirin
-  data_source_dir: aspirin_data
+  split_dataset:
+    file_path: train.xyz
+    train: 0.8
+    val: 0.1
+    test: 0.1
   transforms:
     - _target_: nequip.data.transforms.NeighborListTransform
       r_max: ${cutoff_radius}
     - _target_: nequip.data.transforms.ChemicalSpeciesToAtomTypeMapper
       chemical_symbols: ${chemical_symbols}
-  trainval_test_subset: [40, 10]
-  train_val_split: [30, 10]
-  seed: 123
+  seed: 21
   train_dataloader:
     _target_: torch.utils.data.DataLoader
-    batch_size: 1
+    batch_size: 5
+    num_workers: 5
   val_dataloader:
     _target_: torch.utils.data.DataLoader
     batch_size: 5
+    num_workers: ${data.train_dataloader.num_workers}
   test_dataloader: ${data.val_dataloader}
   stats_manager:
     _target_: nequip.data.CommonDataStatisticsManager
@@ -30,14 +33,24 @@ data:
 
 trainer:
   _target_: lightning.Trainer
-  max_epochs: 5
+  accelerator: gpu
+  max_epochs: 1000
+  enable_checkpointing: true
   check_val_every_n_epoch: 1
   log_every_n_steps: 5
   callbacks:
+        
+    - _target_: lightning.pytorch.callbacks.EarlyStopping
+      monitor: ${monitored_metric}            # validation metric to monitor
+      min_delta: 1e-3                         # how much to be considered a "change"
+      patience: 20                            # how many instances of "no change" before stopping
+  
     - _target_: lightning.pytorch.callbacks.ModelCheckpoint
       dirpath: ${hydra:runtime.output_dir}
       save_last: true
 
+    - _target_: lightning.pytorch.callbacks.LearningRateMonitor
+      logging_interval: epoch
 
 # NOTE:
 # interpolation parameters for Allegro model
@@ -75,7 +88,7 @@ training_module:
     # ^ if you're using PyTorch <= 2.6.0, an error will be thrown -- comment out the line to avoid it
 
     # === basic model params ===
-    seed: 456
+    seed: 21
     model_dtype: float32
     type_names: ${model_type_names}
     r_max: ${cutoff_radius}
@@ -100,10 +113,10 @@ training_module:
     # The following hyperparameters are the main ones that one should focus on tuning.
 
     # maximum order l to use in spherical harmonics embedding, 1 is baseline (fast), 2 is more accurate, but slower, 3 highly accurate but slow
-    l_max: 1
+    l_max: 2
 
     # number of tensor product layers, 1-3 usually best, more is more accurate but slower
-    num_layers: 2
+    num_layers: 3
 
     # number of scalar features, more is more accurate but slower
     # 16, 32, 64, 128, 256 are good options to try depending on the dataset
@@ -165,3 +178,4 @@ training_module:
 
 global_options:
   allow_tf32: false
+
