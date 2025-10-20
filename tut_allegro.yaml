@@ -42,9 +42,9 @@ trainer:
       min_delta: 1e-3                         # how much to be considered a "change"
       patience: 20                            # how many instances of "no change" before stopping
   
-  - _target_: nequip.train.callbacks.TF32Scheduler
-    schedule:
-      0: true
+    - _target_: nequip.train.callbacks.TF32Scheduler
+      schedule:
+        0: true
 
     - _target_: lightning.pytorch.callbacks.ModelCheckpoint
       dirpath: ${hydra:runtime.output_dir}
@@ -179,6 +179,7 @@ training_module:
 
 global_options:
   allow_tf32: false
+
 
 
 
