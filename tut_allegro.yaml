@@ -70,7 +70,7 @@ data:
 
     #- _target_: nequip.data.transforms.VirialToStressTransform
     
-    - _target_: nequip.data.transforms.StressSignFlipTransform
+    #- _target_: nequip.data.transforms.StressSignFlipTransform
 
   # the following are torch.utils.data.DataLoader configs,
   # excluding the arguments `dataset` and `collate_fn`
@@ -279,6 +279,7 @@ training_module:
 
 global_options:
   allow_tf32: false
+
 
 
 
