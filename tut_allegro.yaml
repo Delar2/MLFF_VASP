@@ -115,11 +115,10 @@ trainer:
 
   # use any Lightning supported logger
   logger:
-    # Lightning wandb logger https://lightning.ai/docs/pytorch/stable/api/lightning.pytorch.loggers.wandb.html#module-lightning.pytorch.loggers.wandb
-    _target_: lightning.pytorch.loggers.wandb.WandbLogger
-    project: nequip
-    name: tutorial
-    save_dir: ${hydra:runtime.output_dir}  # use resolver to place wandb logs in hydra's output directory
+    - _target_: lightning.pytorch.loggers.TensorBoardLogger
+      save_dir: outputs/tensorboard
+    - _target_: lightning.pytorch.loggers.CSVLogger
+      save_dir: outputs/csv
 
   # use any Lightning callbacks https://lightning.ai/docs/pytorch/stable/api_references.html#callbacks
   # and any custom callbacks that subclass Lightning's Callback parent class
@@ -279,6 +278,7 @@ training_module:
 
 global_options:
   allow_tf32: false
+
 
 
 
