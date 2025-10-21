@@ -68,6 +68,9 @@ data:
     - _target_: nequip.data.transforms.NeighborListTransform
       r_max: ${cutoff_radius}
 
+    - _target_: nequip.data.transforms.VirialToStressTransform
+    - _target_: nequip.data.transforms.StressSignFlipTransform
+
   # the following are torch.utils.data.DataLoader configs,
   # excluding the arguments `dataset` and `collate_fn`
   # https://pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader
@@ -276,6 +279,7 @@ training_module:
 
 global_options:
   allow_tf32: false
+
 
 
 
