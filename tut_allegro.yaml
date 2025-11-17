@@ -110,7 +110,7 @@ trainer:
   enable_checkpointing: true
   max_epochs: 10000
   max_time: 03:00:00:00
-  log_every_n_steps: 20       # how often to log
+  log_every_n_steps: 1       # how often to log
 
   # use any Lightning supported logger
   logger:
@@ -278,6 +278,7 @@ training_module:
 
 global_options:
   allow_tf32: false
+
 
 
 
