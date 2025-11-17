@@ -76,7 +76,7 @@ data:
   train_dataloader:
     _target_: torch.utils.data.DataLoader
     batch_size: 5
-    num_workers: 5
+    num_workers: 2
     shuffle: true
   val_dataloader:
     _target_: torch.utils.data.DataLoader
@@ -163,6 +163,7 @@ training_module:
     coeffs:
       total_energy: 1.0
       forces: 1.0
+      stress: 1.0
 
   val_metrics:
     _target_: nequip.train.EnergyForceMetrics
@@ -272,11 +273,12 @@ training_module:
     # docs: https://nequip.readthedocs.io/en/latest/api/nn.html#nequip.nn.pair_potential.ZBL
     pair_potential:
       _target_: nequip.nn.pair_potential.ZBL
-      units: real     # Ang and kcal/mol; LAMMPS unit names;  allowed values "metal" and "real"
+      units: metal     # Ang and kcal/mol; LAMMPS unit names;  allowed values "metal" and "real"
       chemical_species: ${chemical_symbols}   # must tell ZBL the chemical species of the various model atom types
 
 global_options:
   allow_tf32: false
+
 
 
 
