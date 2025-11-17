@@ -7,7 +7,7 @@
 # ===========
 # the run types will be completed in sequence
 # one can do `train`, `val`, `test` run types
-run: [train, val]
+run: [train, val, test]
 
 # the following parameters (cutoff_radius, chemical_symbols, model_type_names, monitored_metric) are not used directly by the config parser
 # but parameters that should share the same values are present in different parts of the config
@@ -19,9 +19,9 @@ cutoff_radius: 5.0
 
 # variable interpolation is convenient for wandb sweeps, see documentation for more details
 # the following are NequIP model hyperparameters that can be swept over
-num_layers: 4       # number of interaction blocks, we find 3-5 to work best
-l_max: 1            # the maximum irrep order (rotation order) for the network's features, l=1 is a good default, l=2 is more accurate but slower
-num_features: 32    # the multiplicity of the features, 32 is a good default for accurate network, if you want to be more accurate, go larger, if you want to be faster, go lower
+num_layers: 3       # number of interaction blocks, we find 3-5 to work best
+l_max: 2            # the maximum irrep order (rotation order) for the network's features, l=1 is a good default, l=2 is more accurate but slower
+num_features: 128    # the multiplicity of the features, 32 is a good default for accurate network, if you want to be more accurate, go larger, if you want to be faster, go lower
 
 # There are two sets of atomic types to keep track of in most applications.
 # There is the conventional atomic species (e.g. C, H), and a separate `type_names` known to the model.
@@ -108,7 +108,7 @@ trainer:
   _target_: lightning.Trainer
   accelerator: gpu
   enable_checkpointing: true
-  max_epochs: 1000
+  max_epochs: 10000
   max_time: 03:00:00:00
   log_every_n_steps: 20       # how often to log
 
@@ -126,8 +126,8 @@ trainer:
     # https://lightning.ai/docs/pytorch/stable/api/lightning.pytorch.callbacks.EarlyStopping.html#lightning.pytorch.callbacks.EarlyStopping
     - _target_: lightning.pytorch.callbacks.EarlyStopping
       monitor: ${monitored_metric}            # validation metric to monitor
-      min_delta: 1e-3                         # how much to be considered a "change"
-      patience: 20                            # how many instances of "no change" before stopping
+      min_delta: 1e-4                         # how much to be considered a "change"
+      patience: 50                            # how many instances of "no change" before stopping
 
     # https://lightning.ai/docs/pytorch/stable/api/lightning.pytorch.callbacks.ModelCheckpoint.html#lightning.pytorch.callbacks.ModelCheckpoint
     - _target_: lightning.pytorch.callbacks.ModelCheckpoint
@@ -186,8 +186,8 @@ training_module:
     scheduler:
       _target_: torch.optim.lr_scheduler.ReduceLROnPlateau
       factor: 0.6
-      patience: 5
-      threshold: 0.2
+      patience: 20
+      threshold: 1e-3
       min_lr: 1e-6
     monitor: ${monitored_metric}
     interval: epoch
@@ -234,7 +234,7 @@ training_module:
 
     # == allegro MLPs ==
     # neural network parameters in the Allegro layers
-    allegro_mlp_hidden_layers_depth: 1
+    allegro_mlp_hidden_layers_depth: 2
     allegro_mlp_hidden_layers_width: ${num_scalar_features}
     allegro_mlp_nonlinearity: silu
 
@@ -277,6 +277,7 @@ training_module:
 
 global_options:
   allow_tf32: false
+
 
 
 
