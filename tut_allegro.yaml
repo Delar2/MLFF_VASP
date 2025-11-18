@@ -32,7 +32,7 @@ num_features: 128    # the multiplicity of the features, 32 is a good default fo
 # Because of this distinction, these variables show up as arguments across different categories, including, data, model, metrics and even callbacks.
 # In this case, we fix both to be the same, so we define a single set of each here and use variable interpolation to retrieve them below.
 # This ensures a single location where the values are set to reduce the chances of misconfiguring runs.
-chemical_symbols: [Zr, O]
+chemical_symbols: [Zr, O, Y]
 model_type_names: ${chemical_symbols}
 
 # We want a metric to condition training on (e.g. for best `ModelCheckpoint`, `EarlyStopping`, LR scheduling) which will show up in various places later on, so we set up a "single source of truth" to interpolate over
@@ -50,7 +50,7 @@ data:
 
   # here we take an ASE-readable file (in extxyz format) and split it into train:val:test = 80:10:10
   split_dataset:
-    file_path: data.extxyz
+    file_path: Sim1.extxyz
     train: 0.8
     val: 0.1
     test: 0.1
@@ -278,6 +278,7 @@ training_module:
 
 global_options:
   allow_tf32: false
+
 
 
 
