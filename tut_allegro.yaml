@@ -75,12 +75,12 @@ data:
   # https://pytorch.org/docs/stable/data.html#torch.utils.data.DataLoader
   train_dataloader:
     _target_: torch.utils.data.DataLoader
-    batch_size: 1
+    batch_size: 2
     num_workers: 2
     shuffle: true
   val_dataloader:
     _target_: torch.utils.data.DataLoader
-    batch_size: ${data.train_dataloader.num_workers}
+    batch_size: 5
     num_workers: ${data.train_dataloader.num_workers}  # we want to use the same num_workers -- variable interpolation helps
   test_dataloader: ${data.val_dataloader}  # variable interpolation comes in handy again
 
@@ -278,6 +278,7 @@ training_module:
 
 global_options:
   allow_tf32: false
+
 
 
 
