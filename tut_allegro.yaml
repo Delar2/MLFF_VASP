@@ -50,7 +50,7 @@ data:
 
   # here we take an ASE-readable file (in extxyz format) and split it into train:val:test = 80:10:10
   split_dataset:
-    file_path: Sim1_run.extxyz
+    file_path: Sim1_1_run.extxyz
     train: 0.8
     val: 0.1
     test: 0.1
@@ -68,7 +68,7 @@ data:
     - _target_: nequip.data.transforms.NeighborListTransform
       r_max: ${cutoff_radius}
       
-    - _target_: nequip.data.transforms.StressSignFlipTransform
+#    - _target_: nequip.data.transforms.StressSignFlipTransform
 
   # the following are torch.utils.data.DataLoader configs,
   # excluding the arguments `dataset` and `collate_fn`
@@ -163,7 +163,7 @@ training_module:
     coeffs:
       total_energy: 1.0
       forces: 1.0
-      stress: 1.0
+    #  stress: 1.0
 
   val_metrics:
     _target_: nequip.train.EnergyForceMetrics
@@ -278,6 +278,7 @@ training_module:
 
 global_options:
   allow_tf32: false
+
 
 
 
