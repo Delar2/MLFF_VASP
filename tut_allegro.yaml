@@ -57,17 +57,15 @@ data:
 
   # `transforms` convert data from the Dataset to a form that can be used by the ML model
   transforms:
-    # the models only know atom types, which can be different from the chemical species (e.g. C, H)
-    # for instance we can have data with different charge states of carbon, which means they are
-    # all labeled by chemical species `C`, but may have different atom type labels based on the charge states
-    # in this case, the atom types are the same as the chemical species, but we still have to include this
-    # transformation to ensure that the data has 0-indexed atom type lists used in the various model operations
     - _target_: nequip.data.transforms.ChemicalSpeciesToAtomTypeMapper
-      chemical_symbols: ${chemical_symbols}
-    # data doesn't usually come with a neighborlist -- this transform prepares the neighborlist
+      model_type_names: ${model_type_names}
+      chemical_species_to_atom_type_map:
+        Zr: Zr
+        O: O
+        Y: Y
+
     - _target_: nequip.data.transforms.NeighborListTransform
       r_max: ${cutoff_radius}
-      
 #    - _target_: nequip.data.transforms.StressSignFlipTransform
 
   # the following are torch.utils.data.DataLoader configs,
@@ -278,6 +276,7 @@ training_module:
 
 global_options:
   allow_tf32: false
+
 
 
 
