@@ -163,7 +163,7 @@ training_module:
     coeffs:
       total_energy: 1.0
       forces: 1.0
-    #  stress: 1.0
+      stress: 1.0
 
   val_metrics:
     _target_: nequip.train.EnergyForceMetrics
@@ -278,6 +278,7 @@ training_module:
 
 global_options:
   allow_tf32: false
+
 
 
 
